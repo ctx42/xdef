@@ -72,7 +72,7 @@ func Test_ImgRefName(t *testing.T) {
 		have := ImgRefName(env)
 
 		// --- Then ---
-		want := "no-cc-" + time.Now().UTC().Format("060102150405") + "-"
+		want := "no-ccid-" + time.Now().UTC().Format("060102150405") + "-"
 		if !strings.HasPrefix(have, want) {
 			t.Errorf("expected \"unknown\" got: %q", have)
 		}
@@ -80,14 +80,14 @@ func Test_ImgRefName(t *testing.T) {
 
 	t.Run("EnvImgRefName set", func(t *testing.T) {
 		// --- Given ---
-		env := []string{EnvImgRefName + "=cc-tag"}
+		env := []string{EnvImgRefName + "=ccid"}
 
 		// --- When ---
 		have := ImgRefName(env)
 
 		// --- Then ---
-		if have != "cc-tag" {
-			t.Errorf(`expected "cc-tag" got: %q`, have)
+		if have != "ccid" {
+			t.Errorf(`expected "ccid" got: %q`, have)
 		}
 	})
 }

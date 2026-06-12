@@ -26,14 +26,14 @@ func CreatedStr() string {
 
 // ImgRefName returns the value of [EnvImgRefName] environment variable. When
 // the environment variable is not set, it will return a string formatted like
-// "no-cc-240808100435-885410365" where the first set of numbers is the current
-// date and the second is the number of nanoseconds.
+// "no-ccid-240808100435-885410365" where the first set of numbers is the
+// current date and the second is the number of nanoseconds.
 func ImgRefName(env []string) string {
 	if val, _ := envLookup(env, EnvImgRefName); val != "" {
 		return val
 	}
 	tim := time.Now().UTC().Format("060102150405-.999999999")
-	tag := "no-cc-" + strings.ReplaceAll(tim, ".", "")
+	tag := "no-ccid-" + strings.ReplaceAll(tim, ".", "")
 	return tag
 }
 

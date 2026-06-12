@@ -26,7 +26,7 @@ env := os.Environ()
 // format (truncated to millisecond precision) if not set.
 created := xdef.Created(env)
 
-// Returns OCI_IMAGE_REF_NAME value, or a unique "no-cc-<timestamp>"
+// Returns OCI_IMAGE_REF_NAME value, or a unique "no-ccid-<timestamp>"
 // tag if not set.
 refName := xdef.ImgRefName(env)
 ```
