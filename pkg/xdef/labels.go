@@ -47,10 +47,10 @@ const (
 	// Example: 1a12ec31
 	LabImgRev = "org.opencontainers.image.revision"
 
-	// LabImgRefName is the OCI Image Spec annotation used to store the CI/CD
-	// build tag that uniquely identifies the pipeline job which built the
-	// image. If the image was not built by a CI/CD pipeline, it should be set
-	// to "unknown".
+	// LabImgRefName is the OCI Image Spec annotation for the name of the
+	// image reference (e.g., a registry tag). OCI does not prescribe a specific
+	// format. It may be used, for example, as a CI/CD build tag that uniquely
+	// identifies the pipeline job which produced the image.
 	//
 	// Example: jenkins-project-master-29
 	LabImgRefName = "org.opencontainers.image.ref.name"
