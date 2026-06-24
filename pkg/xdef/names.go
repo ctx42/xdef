@@ -52,8 +52,9 @@ const (
 
 	// EnvImgRefName is the container environment variable mirroring the
 	// [LabImgRefName] annotation (e.g., a registry tag). OCI does not
-	// prescribe a specific format. It may be used, for example, as a CI/CD build
-	// tag that uniquely identifies the pipeline job which produced the image.
+	// prescribe a specific format. It may be used, for example, as a CI/CD
+	// build tag that uniquely identifies the pipeline job which produced the
+	// image.
 	//
 	// Example: jenkins-skw-tst-master-29
 	EnvImgRefName = "OCI_IMAGE_REF_NAME"
