@@ -1,3 +1,6 @@
+## v0.3.0 (Thu, 09 Jul 2026 14:58:06 UTC)
+- feat(xdef): add NotSet placeholder for unpopulated build metadata.
+
 ## v0.2.0 (Thu, 09 Jul 2026 14:50:31 UTC)
 - docs: improve godoc style.
 - feat(xdef): add build-metadata ldflags variable names.
