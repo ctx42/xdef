@@ -20,4 +20,8 @@ const (
 
 	// PhTime defines placeholder for unknown (zero value) time.
 	PhTime = "0001-01-01T00:00:00Z"
+
+	// NotSet is the placeholder for a build-metadata variable that was never
+	// populated via ldflags at compile time.
+	NotSet = "<not set>"
 )
