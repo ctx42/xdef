@@ -1,3 +1,6 @@
+## v0.4.0 (Sat, 11 Jul 2026 21:54:36 UTC)
+- feat(xdef)!: add C42_ build-metadata env vars.
+
 ## v0.3.0 (Thu, 09 Jul 2026 14:58:06 UTC)
 - feat(xdef): add NotSet placeholder for unpopulated build metadata.
 
