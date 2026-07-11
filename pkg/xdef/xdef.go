@@ -1,10 +1,12 @@
 // SPDX-FileCopyrightText: (c) 2026 Rafal Zajac
 // SPDX-License-Identifier: MIT
 
-// Package xdef provides shared definitions for ctx42 container images:
-// OCI Image Spec label names, their matching container environment variable
-// names, placeholder values for unknown build metadata, and helpers for
-// reading those variables from a process environment slice.
+// Package xdef provides shared definitions used across ctx42 software: OCI
+// Image Spec label names and their matching container environment variable
+// names, build and SCM metadata variable names (both the ldflags variable and
+// the environment variable that carry each value), placeholder values for
+// unknown build metadata, and helpers for reading those variables from a
+// process environment slice.
 package xdef
 
 // Placeholders.

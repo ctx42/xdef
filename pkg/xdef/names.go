@@ -4,8 +4,7 @@
 package xdef
 
 // Environment variables set in Docker images. The OCI_IMAGE_* variables
-// mirror the OCI Image Spec labels inside the container. The CTX42_*
-// variables are ctx42-specific.
+// mirror the OCI Image Spec labels inside the container.
 const (
 	// EnvImgCreated is the container environment variable mirroring the
 	// [LabImgCreated] label. It holds the image build date in RFC3339 format.
