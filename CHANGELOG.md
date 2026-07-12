@@ -1,3 +1,7 @@
+## v0.5.0 (Sun, 12 Jul 2026 12:31:05 UTC)
+- feat(xdef): add project layout environment variables.
+- chore(idea): rename run config, fix module to xdef.
+
 ## v0.4.0 (Sat, 11 Jul 2026 21:54:36 UTC)
 - feat(xdef)!: add C42_ build-metadata env vars.
 
