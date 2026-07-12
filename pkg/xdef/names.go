@@ -18,15 +18,15 @@ const (
 	// Example: echo-server
 	EnvImgTitle = "OCI_IMAGE_TITLE"
 
-	// EnvImgAuthors is the container environment variable mirroring the
-	// [LabImgAuthors]. It holds the contact details of the people or
-	// organization responsible for the image.
-	EnvImgAuthors = "OCI_IMAGE_AUTHORS"
-
 	// EnvImgDesc is the container environment variable mirroring the
 	// [LabImgDesc] label. It holds a human-readable description of the
 	// software packaged in the image.
 	EnvImgDesc = "OCI_IMAGE_DESCRIPTION"
+
+	// EnvImgAuthors is the container environment variable mirroring the
+	// [LabImgAuthors]. It holds the contact details of the people or
+	// organization responsible for the image.
+	EnvImgAuthors = "OCI_IMAGE_AUTHORS"
 
 	// EnvImgSrc is the container environment variable mirroring the
 	// [LabImgSrc]. It holds the URL to the source code repository used to

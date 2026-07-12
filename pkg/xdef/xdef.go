@@ -4,9 +4,9 @@
 // Package xdef provides shared definitions used across ctx42 software: OCI
 // Image Spec label names and their matching container environment variable
 // names, build and SCM metadata variable names (both the ldflags variable and
-// the environment variable that carry each value), placeholder values for
-// unknown build metadata, and helpers for reading those variables from a
-// process environment slice.
+// the environment variable that carry each value), project layout environment
+// variable names, placeholder values for unknown build metadata, and helpers
+// for reading those variables from a process environment slice.
 package xdef
 
 // Placeholders.

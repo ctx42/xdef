@@ -13,6 +13,49 @@ and helpers for reading variables from a process environment slice.
 import "github.com/ctx42/xdef/pkg/xdef"
 ```
 
+## Variables
+
+Each value has up to four matching name constants, one per column below:
+
+- **C42 env** (`Env*`) — the runtime environment variable carrying the
+  binary's provenance; pairs one-to-one with the ldflags var.
+- **OCI env** (`EnvImg*`) — the container environment variable mirroring the
+  OCI label.
+- **OCI label** (`Lab*`) — the OCI Image Spec label stamped on the image.
+- **ldflags var** (`Var*`) — the Go identifier `go build -ldflags -X` targets
+  to inject the value at build time; build/SCM metadata only.
+
+The `C42_*` and `OCI_IMAGE_*` variables overlap on several values on purpose:
+they describe **two different build events**. `OCI_IMAGE_*` carries the
+**image's** provenance, stamped when the image is built; `C42_*` carries the
+**binary's** provenance, injected when the binary is built. A binary built from
+commit `A` and later packaged into an image tagged `v1.2.4` reports the
+binary's values in `C42_*` and the image's in `OCI_IMAGE_*`, and they may
+legitimately differ. Read `OCI_IMAGE_*` to answer "which image is this?" and
+`C42_*` to answer "which binary is this?".
+
+| Concept            | C42 env          | OCI env                 | OCI label                              | ldflags var |
+|--------------------|------------------|-------------------------|----------------------------------------|-------------|
+| build date         | `C42_BUILD_DATE` | `OCI_IMAGE_CREATED`     | `org.opencontainers.image.created`     | `buildDate` |
+| version tag        | `C42_SCM_REV`    | `OCI_IMAGE_VERSION`     | `org.opencontainers.image.version`     | `scmRev`    |
+| commit hash        | `C42_SCM_HASH`   | `OCI_IMAGE_REVISION`    | `org.opencontainers.image.revision`    | `scmHash`   |
+| source repository  | `C42_SCM_REPO`   | `OCI_IMAGE_SOURCE`      | `org.opencontainers.image.source`      | `scmRepo`   |
+| working-tree state | `C42_SCM_STATE`  | —                       | —                                      | `scmState`  |
+| CI/CD identifier   | `C42_CCID`       | `OCI_IMAGE_REF_NAME`    | `org.opencontainers.image.ref.name`    | `ccid`      |
+| title / name       | `C42_PROJ_NAME`  | `OCI_IMAGE_TITLE`       | `org.opencontainers.image.title`       | —           |
+| authors            | —                | `OCI_IMAGE_AUTHORS`     | `org.opencontainers.image.authors`     | —           |
+| description        | —                | `OCI_IMAGE_DESCRIPTION` | `org.opencontainers.image.description` | —           |
+| base image         | —                | `OCI_IMAGE_BASE_NAME`   | `org.opencontainers.image.base.name`   | —           |
+
+The project layout variables (`C42_PROJ_ROOT_DIR`, `C42_PROJ_DIST_DIR`,
+`C42_PROJ_GO_IMP_SPEC`) have no ldflags or OCI counterpart; project tooling
+sets them to point commands at the project.
+
+```go
+xdef.VarScmRev // "scmRev"      -> -ldflags -X main.scmRev=v1.2.3
+xdef.EnvScmRev // "C42_SCM_REV" -> environment variable read at runtime
+```
+
 ## Usage
 
 Read image metadata from a container's environment, falling back to sensible
@@ -39,71 +82,6 @@ labels := map[string]string{
     xdef.LabImgCreated: xdef.PhTime,
 }
 ```
-
-## Labels and Environment Variables
-
-| OCI label                              | Env variable            |
-|----------------------------------------|-------------------------|
-| `org.opencontainers.image.created`     | `OCI_IMAGE_CREATED`     |
-| `org.opencontainers.image.title`       | `OCI_IMAGE_TITLE`       |
-| `org.opencontainers.image.description` | `OCI_IMAGE_DESCRIPTION` |
-| `org.opencontainers.image.authors`     | `OCI_IMAGE_AUTHORS`     |
-| `org.opencontainers.image.source`      | `OCI_IMAGE_SOURCE`      |
-| `org.opencontainers.image.version`     | `OCI_IMAGE_VERSION`     |
-| `org.opencontainers.image.revision`    | `OCI_IMAGE_REVISION`    |
-| `org.opencontainers.image.ref.name`    | `OCI_IMAGE_REF_NAME`    |
-| `org.opencontainers.image.base.name`   | `OCI_IMAGE_BASE_NAME`   |
-
-## Build Metadata
-
-Build and SCM metadata has two matching name constants per value: the `Var*`
-ldflags variable (for `go build -ldflags -X`) and the `Env*` environment
-variable that carries the same value at runtime.
-
-| Build variable | Env variable     |
-|----------------|------------------|
-| `buildDate`    | `C42_BUILD_DATE` |
-| `scmRev`       | `C42_SCM_REV`    |
-| `scmHash`      | `C42_SCM_HASH`   |
-| `scmState`     | `C42_SCM_STATE`  |
-| `scmRepo`      | `C42_SCM_REPO`   |
-| `ccid`         | `C42_CCID`       |
-
-```go
-xdef.VarScmRev // "scmRev"      -> -ldflags -X main.scmRev=v1.2.3
-xdef.EnvScmRev // "C42_SCM_REV" -> environment variable read at runtime
-```
-
-## Image vs. binary provenance
-
-The `C42_*` (`Env*`) and `OCI_IMAGE_*` (`EnvImg*`) variables overlap on several
-values on purpose: they describe **two different build events**.
-
-- `OCI_IMAGE_*` carries the **image's** provenance, stamped when the image is
-  built (the OCI Image Spec labels, surfaced to the container as environment
-  variables).
-
-- `C42_*` carries the **binary's** provenance, injected when the binary is
-  built (`go build -ldflags -X`).
-
-Those events can happen at different times: a binary built from commit `A` and
-later packaged into an image tagged `v1.2.4` reports the binary's values in
-`C42_*` and the image's values in `OCI_IMAGE_*`, and they may legitimately
-differ. Read `OCI_IMAGE_*` to answer "which image is this?" and `C42_*` to
-answer "which binary is this?".
-
-| Concept            | OCI env (image build)   | C42 env (binary build) |
-|--------------------|-------------------------|------------------------|
-| build date         | `OCI_IMAGE_CREATED`     | `C42_BUILD_DATE`       |
-| version tag        | `OCI_IMAGE_VERSION`     | `C42_SCM_REV`          |
-| commit hash        | `OCI_IMAGE_REVISION`    | `C42_SCM_HASH`         |
-| source repository  | `OCI_IMAGE_SOURCE`      | `C42_SCM_REPO`         |
-| CI/CD identifier   | `OCI_IMAGE_REF_NAME`    | `C42_CCID`             |
-| working-tree state | —                       | `C42_SCM_STATE`        |
-| title / name       | `OCI_IMAGE_TITLE`       | —                      |
-| authors            | `OCI_IMAGE_AUTHORS`     | —                      |
-| description        | `OCI_IMAGE_DESCRIPTION` | —                      |
-| base image         | `OCI_IMAGE_BASE_NAME`   | —                      |
 
 ## License
 
