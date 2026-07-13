@@ -1,3 +1,6 @@
+## v0.6.0 (Mon, 13 Jul 2026 20:05:57 UTC)
+- feat(xdef): add Docker registry and build env vars.
+
 ## v0.5.0 (Sun, 12 Jul 2026 12:31:05 UTC)
 - feat(xdef): add project layout environment variables.
 - chore(idea): rename run config, fix module to xdef.
