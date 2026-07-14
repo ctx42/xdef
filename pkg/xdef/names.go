@@ -55,7 +55,7 @@ const (
 	// build tag that uniquely identifies the pipeline job which produced the
 	// image.
 	//
-	// Example: jenkins-skw-tst-master-29
+	// Example: jenkins-tst-master-29
 	EnvImgRefName = "OCI_IMAGE_REF_NAME"
 
 	// EnvImgBaseName is the container environment variable mirroring the

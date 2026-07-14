@@ -56,6 +56,35 @@ xdef.VarScmRev // "scmRev"      -> -ldflags -X main.scmRev=v1.2.3
 xdef.EnvScmRev // "C42_SCM_REV" -> environment variable read at runtime
 ```
 
+## Container build variables
+
+Environment variable names read from the project configuration to drive image
+builds. Like the project layout variables, they have no ldflags or OCI
+counterpart.
+
+| Concept                               | C42 env                |
+|---------------------------------------|------------------------|
+| registry hostname                     | `C42_REG_HOST`         |
+| registry URL scheme                   | `C42_REG_SCHEME`       |
+| image repository                      | `C42_REG_REPO`         |
+| base image reference (build arg)      | `C42_BLD_IMG_BASE`     |
+| build targets (comma-separated)       | `C42_BLD_TARGETS`      |
+| in-image root directory               | `C42_CTR_ROOT`         |
+| in-image scripts/binaries directory   | `C42_CTR_BIN`          |
+| in-image project root directory       | `C42_CTR_PROJECT_ROOT` |
+| in-image entrypoint scripts directory | `C42_CTR_ENTRYPOINT`   |
+| Go module proxy URL                   | `C42_GOPROXY`          |
+| Go checksum database                  | `C42_GOSUMDB`          |
+| private Go module patterns            | `C42_GOPRIVATE`        |
+
+The registry (`EnvReg*`) and build (`EnvBld*`) variables drive image
+references and the container build; `C42_BLD_IMG_BASE` is passed as a build
+argument and `C42_BLD_TARGETS` is a comma-separated list of targets in the build
+file (`Containerfile`/`Dockerfile`). The
+in-image layout variables (`EnvCtr*`) name the standard directory layout that
+ctx42 base images provide. The Go module variables (`EnvGo*`) are copied into the
+toolchain's `GOPROXY`, `GOSUMDB`, and `GOPRIVATE`.
+
 ## Usage
 
 Read image metadata from a container's environment, falling back to sensible

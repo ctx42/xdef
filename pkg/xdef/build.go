@@ -37,7 +37,7 @@ const (
 
 	// VarCCID is the variable name holding the CI/CD job identifier.
 	//
-	// Example: jenkins-skw-tst-master-29
+	// Example: jenkins-tst-master-29
 	VarCCID = "ccid"
 )
 
@@ -75,6 +75,6 @@ const (
 
 	// EnvCCID is the environment variable holding the CI/CD job identifier.
 	//
-	// Example: jenkins-skw-tst-master-29
+	// Example: jenkins-tst-master-29
 	EnvCCID = "C42_CCID"
 )
