@@ -1,3 +1,6 @@
+## v0.7.0 (Tue, 14 Jul 2026 08:16:43 UTC)
+- feat(xdef)!: use container-generic env var names.
+
 ## v0.6.0 (Mon, 13 Jul 2026 20:05:57 UTC)
 - feat(xdef): add Docker registry and build env vars.
 
