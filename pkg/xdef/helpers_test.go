@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-func Test_Created(t *testing.T) {
-	t.Run("EnvImgCreated not set", func(t *testing.T) {
+func Test_BldDate(t *testing.T) {
+	t.Run("EnvBldDate empty", func(t *testing.T) {
 		// --- Given ---
-		env := []string{EnvImgCreated + "="}
+		env := []string{EnvBldDate + "="}
 
 		// --- When ---
-		have := Created(env)
+		have := BldDate(env)
 
 		// --- Then ---
 		tim, err := time.Parse(time.RFC3339Nano, have)
@@ -31,12 +31,12 @@ func Test_Created(t *testing.T) {
 		}
 	})
 
-	t.Run("EnvImgCreated set", func(t *testing.T) {
+	t.Run("EnvBldDate set", func(t *testing.T) {
 		// --- Given ---
-		env := []string{EnvImgCreated + "=2000-01-02T03:04:05Z"}
+		env := []string{EnvBldDate + "=2000-01-02T03:04:05Z"}
 
 		// --- When ---
-		have := Created(env)
+		have := BldDate(env)
 
 		// --- Then ---
 		if have != "2000-01-02T03:04:05Z" {
@@ -45,9 +45,9 @@ func Test_Created(t *testing.T) {
 	})
 }
 
-func Test_CreatedStr(t *testing.T) {
+func Test_BldDateStr(t *testing.T) {
 	// --- When ---
-	have := CreatedStr()
+	have := BldDateStr()
 
 	// --- Then ---
 	tim, err := time.Parse(time.RFC3339Nano, have)
@@ -63,60 +63,71 @@ func Test_CreatedStr(t *testing.T) {
 	}
 }
 
-func Test_ImgRefName(t *testing.T) {
-	t.Run("EnvImgRefName not set", func(t *testing.T) {
+func Test_CCID(t *testing.T) {
+	t.Run("EnvBldCCID empty", func(t *testing.T) {
 		// --- Given ---
-		env := []string{EnvImgRefName + "="}
+		env := []string{EnvBldCCID + "="}
+		before := time.Now().UTC().Format("060102150405")
 
 		// --- When ---
-		have := ImgRefName(env)
+		have := CCID(env)
 
 		// --- Then ---
-		want := "no-ccid-" + time.Now().UTC().Format("060102150405") + "-"
-		if !strings.HasPrefix(have, want) {
-			t.Errorf("expected \"unknown\" got: %q", have)
+		after := time.Now().UTC().Format("060102150405")
+		wBefore, wAfter := "ccid"+before, "ccid"+after
+		if !strings.HasPrefix(have, wBefore) &&
+			!strings.HasPrefix(have, wAfter) {
+
+			t.Errorf("expected prefix %q or %q got: %q",
+				wBefore, wAfter, have)
+		}
+		if len(have) != len(wBefore)+3 {
+			t.Errorf("expected length %d got: %d (%q)",
+				len(wBefore)+3, len(have), have)
+		}
+		if strings.ContainsAny(have, ".-") {
+			t.Errorf(`expected no "." or "-" in the fallback got: %q`, have)
 		}
 	})
 
-	t.Run("EnvImgRefName set", func(t *testing.T) {
+	t.Run("EnvBldCCID set", func(t *testing.T) {
 		// --- Given ---
-		env := []string{EnvImgRefName + "=ccid"}
+		env := []string{EnvBldCCID + "=project-master-29"}
 
 		// --- When ---
-		have := ImgRefName(env)
+		have := CCID(env)
 
 		// --- Then ---
-		if have != "ccid" {
-			t.Errorf(`expected "ccid" got: %q`, have)
+		if have != "project-master-29" {
+			t.Errorf(`expected "project-master-29" got: %q`, have)
 		}
 	})
 }
 
-// envLookupTests holds test cases for envLookup.
-var envLookupTests = []struct {
-	testN string
+func Test_envLookup_tabular(t *testing.T) {
+	tt := []struct {
+		testN string
 
-	env        []string
-	findKey    string
-	wantValue  string
-	wantExists bool
-}{
-	{"found", []string{"key0=val0", "key1=val1"}, "key1", "val1", true},
-	{"not found", []string{"key0=val0", "key1=val1"}, "key9", "", false},
-	{"partial", []string{"key0=val0", "key1=val1"}, "key", "", false},
-	{"empty env", []string{}, "key", "", false},
-	{"empty key", []string{"key0=val0", "key1=val1"}, "", "", false},
-	{
-		"last value counts",
-		[]string{"key0=val0", "key1=val1", "key0=abc"},
-		"key0",
-		"abc",
-		true,
-	},
-}
+		env        []string
+		findKey    string
+		wantValue  string
+		wantExists bool
+	}{
+		{"found", []string{"key0=val0", "key1=val1"}, "key1", "val1", true},
+		{"not found", []string{"key0=val0", "key1=val1"}, "key9", "", false},
+		{"partial", []string{"key0=val0", "key1=val1"}, "key", "", false},
+		{"empty env", []string{}, "key", "", false},
+		{"empty key", []string{"key0=val0", "key1=val1"}, "", "", false},
+		{
+			"last value counts",
+			[]string{"key0=val0", "key1=val1", "key0=abc"},
+			"key0",
+			"abc",
+			true,
+		},
+	}
 
-func Test_EnvLookup_tabular(t *testing.T) {
-	for _, tc := range envLookupTests {
+	for _, tc := range tt {
 		t.Run(tc.testN, func(t *testing.T) {
 			// --- When ---
 			haveValue, haveExists := envLookup(tc.env, tc.findKey)

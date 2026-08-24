@@ -4,37 +4,44 @@
 package xdef
 
 import (
+	"fmt"
 	"strings"
 	"time"
 )
 
-// Created returns the value of the [EnvImgCreated] environment variable.
-// Returns the current UTC date in RFC3339 format if the variable is not set or
-// is empty.
-func Created(env []string) string {
-	if val, _ := envLookup(env, EnvImgCreated); val != "" {
+// BldDate returns the value of the [EnvBldDate] environment variable. Returns
+// the current date, formatted the way [BldDateStr] formats it, if the variable
+// is not set or is empty.
+func BldDate(env []string) string {
+	if val, _ := envLookup(env, EnvBldDate); val != "" {
 		return val
 	}
-	return CreatedStr()
+	return BldDateStr()
 }
 
-// CreatedStr returns the current date in UTC formatted as [time.RFC3339Nano],
+// BldDateStr returns the current date in UTC formatted as [time.RFC3339Nano],
 // truncated to millisecond precision.
-func CreatedStr() string {
+func BldDateStr() string {
 	return time.Now().UTC().Truncate(time.Millisecond).Format(time.RFC3339Nano)
 }
 
-// ImgRefName returns the value of [EnvImgRefName] environment variable. When
-// the environment variable is not set, it will return a string formatted like
-// "no-ccid-240808100435-885410365" where the first set of numbers is the
-// current date and the second is the number of nanoseconds.
-func ImgRefName(env []string) string {
-	if val, _ := envLookup(env, EnvImgRefName); val != "" {
+// CCID returns the value of the [EnvBldCCID] environment variable. When the
+// environment variable is not set or is empty, it returns a fallback
+// identifier formatted like "ccid260913203327674": the "ccid" prefix, the
+// current UTC date as twelve digits (YYMMDDhhmmss), and the milliseconds
+// within that second as three, zero padded. Both fields are fixed width, so
+// they can be read back by position.
+//
+// The fallback is alphanumeric on purpose. It reaches SemVerBuild as the
+// value of the "ccid" pair, where "." separates the pairs and the ctx42
+// convention bars "-", which leaves no separator to spend inside the value.
+func CCID(env []string) string {
+	if val, _ := envLookup(env, EnvBldCCID); val != "" {
 		return val
 	}
-	tim := time.Now().UTC().Format("060102150405-.999999999")
-	tag := "no-ccid-" + strings.ReplaceAll(tim, ".", "")
-	return tag
+	now := time.Now().UTC()
+	msec := now.Nanosecond() / int(time.Millisecond)
+	return fmt.Sprintf("ccid%s%03d", now.Format("060102150405"), msec)
 }
 
 // envLookup retrieves the value of the "env" variable named by the key. If

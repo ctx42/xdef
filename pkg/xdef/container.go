@@ -3,40 +3,35 @@
 
 package xdef
 
-// Environment variable names describing the private container registry a
-// project publishes to and the inputs that drive its container build. Project
-// tooling reads them from the project configuration to assemble image
-// references and run the build.
+// Environment variable names describing the standard in-image directory layout
+// that ctx42 base images provide. Programs and entrypoint scripts running
+// inside the image read them to locate project files and supporting tooling.
 const (
-	// EnvRegHost is the environment variable holding the host of the private
-	// container registry. Together with [EnvRegRepo] it marks the remote as
-	// configured.
+	// EnvCtrRoot is the environment variable holding the absolute path to the
+	// root directory inside the image under which files are placed, such as
+	// project sources, scripts, and supporting tooling.
 	//
-	// Example: my.nexus.dev
-	EnvRegHost = "C42_REG_HOST"
+	// Example: /ctx42
+	EnvCtrRoot = "C42_CTR_ROOT"
 
-	// EnvRegScheme is the environment variable holding the URL scheme used to
-	// reach the private container registry named by [EnvRegHost].
+	// EnvCtrBin is the environment variable holding the absolute path to the
+	// directory with project-related scripts and binary files. It is usually a
+	// subdirectory of [EnvCtrRoot].
 	//
-	// Example: https
-	EnvRegScheme = "C42_REG_SCHEME"
+	// Example: /ctx42/bin
+	EnvCtrBin = "C42_CTR_BIN"
 
-	// EnvRegRepo is the environment variable holding the private repository that
-	// image references are built from and images are pushed to.
+	// EnvCtrPrjRoot is the environment variable holding the absolute path
+	// inside the image where a project's files are bound or copied. It is
+	// usually a subdirectory of [EnvCtrRoot].
 	//
-	// Example: my.nexus.dev/repo
-	EnvRegRepo = "C42_REG_REPO"
+	// Example: /ctx42/project
+	EnvCtrPrjRoot = "C42_CTR_PRJ_ROOT"
 
-	// EnvBldImgBase is the environment variable holding the base image
-	// reference passed to the container build as a build argument.
+	// EnvCtrEntrypoint is the environment variable holding the absolute path to
+	// the directory with entrypoint scripts run during container startup. It is
+	// usually a subdirectory of [EnvCtrRoot].
 	//
-	// Example: almalinux:9.5-minimal
-	EnvBldImgBase = "C42_BLD_IMG_BASE"
-
-	// EnvBldTargets is the environment variable holding the comma-separated
-	// list of build targets. Each target must exist in the build file
-	// (Containerfile/Dockerfile).
-	//
-	// Example: first,second,third
-	EnvBldTargets = "C42_BLD_TARGETS"
+	// Example: /ctx42/entrypoint
+	EnvCtrEntrypoint = "C42_CTR_ENTRYPOINT"
 )
