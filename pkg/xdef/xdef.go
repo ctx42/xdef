@@ -31,5 +31,7 @@
 //
 // This package owns "C42_" and the family segments above. A module building on
 // it owns "C42_" followed by its own tool segment, and defines those names
-// itself.
+// itself. It defines no vendor-specific label key: the OCI Image Spec fixes
+// the spelling of every key here, and a value the spec has no annotation for
+// is named by the code stamping it, under that vendor's own prefix.
 package xdef

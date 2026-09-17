@@ -84,10 +84,21 @@ xdef.VarScmRev // "scmRev"      -> -ldflags -X main.scmRev=v1.2.3
 xdef.EnvScmRev // "C42_SCM_REV" -> environment variable read at runtime
 ```
 
+## Image labels
+
+The provenance table above pairs four values with the OCI Image Spec keys that
+carry them, and those four are every label key xdef defines. The spec reserves
+the `org.opencontainers` prefix for itself and has no annotation for some
+values a build carries — the build target in `C42_BLD_IMG_TARGET` among them.
+xdef deliberately names no key for those: a vendor-specific key belongs to the
+code stamping the image, under that vendor's own reverse domain prefix, so
+nothing here obliges a user of this module to adopt a ctx42 name.
+
 ## Project and container build variables
 
 Read from the project configuration file to identify the project and drive its
-image build. None of them has an ldflags or OCI counterpart.
+image build. None has an ldflags counterpart, and the spec has no annotation
+for any of them (see [Image labels](#image-labels)).
 
 | Concept                               | C42 env               | Family |
 |---------------------------------------|-----------------------|--------|
@@ -97,6 +108,7 @@ image build. None of them has an ldflags or OCI counterpart.
 | image repository                      | `C42_REG_REPO`        | `REG`  |
 | build-stage base image                | `C42_BLD_IMG_BASE`    | `BLD`  |
 | runtime-stage base image              | `C42_BLD_IMG_RUNTIME` | `BLD`  |
+| build target                          | `C42_BLD_IMG_TARGET`  | `BLD`  |
 | build targets (comma-separated)       | `C42_BLD_IMG_TARGETS` | `BLD`  |
 | in-image root directory               | `C42_CTR_ROOT`        | `CTR`  |
 | in-image scripts/binaries directory   | `C42_CTR_BIN`         | `CTR`  |
@@ -110,7 +122,8 @@ The registry variables assemble image references; `C42_REG_HOST` and
 `C42_REG_REPO` together mark the remote as configured. The build variables are
 passed to the container build as build arguments — `C42_BLD_IMG_TARGETS` is
 optional and switches a project from one image to one image per listed target,
-each of which must exist in the build file (`Containerfile`/`Dockerfile`). The
+each of which must exist in the build file (`Containerfile`/`Dockerfile`);
+`C42_BLD_IMG_TARGET` names the one target a given image was built from. The
 `C42_CTR_*` variables name the standard directory layout ctx42 base images
 provide, for programs and entrypoint scripts running inside the image.
 
