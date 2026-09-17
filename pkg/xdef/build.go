@@ -26,8 +26,16 @@ func BldDate(env []string) string {
 	return BldDateStr()
 }
 
-// BldDateStr returns the current date in UTC formatted as [time.RFC3339Nano],
-// truncated to millisecond precision.
+// bldDateLayout is the layout [BldDateStr] renders the build date with: an
+// RFC3339 timestamp whose fractional second is always three digits.
+// [time.RFC3339Nano] drops trailing zeros, which makes the width of the
+// rendered date vary with the value.
+const bldDateLayout = "2006-01-02T15:04:05.000Z07:00"
+
+// BldDateStr returns the current date in UTC formatted as RFC3339 with
+// millisecond precision, for example "2000-01-02T03:04:05.678Z". The
+// fractional second is always three digits, so every date it returns is the
+// same width.
 func BldDateStr() string {
-	return time.Now().UTC().Truncate(time.Millisecond).Format(time.RFC3339Nano)
+	return time.Now().UTC().Format(bldDateLayout)
 }

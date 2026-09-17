@@ -148,8 +148,8 @@ defaults when the variables are absent:
 ```go
 env := os.Environ()
 
-// Returns C42_BLD_DATE, or the current UTC time in RFC3339Nano format
-// (truncated to millisecond precision) if not set.
+// Returns C42_BLD_DATE, or the current UTC time in RFC3339 format with
+// millisecond precision if not set.
 created := xdef.BldDate(env)
 ```
 

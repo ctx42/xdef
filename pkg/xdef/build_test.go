@@ -44,6 +44,48 @@ func Test_BldDate(t *testing.T) {
 	})
 }
 
+func Test_bldDateLayout_tabular(t *testing.T) {
+	tt := []struct {
+		testN string
+
+		tim  time.Time
+		want string
+	}{
+		{
+			"millisecond",
+			time.Date(2000, 1, 2, 3, 4, 5, 678_000_000, time.UTC),
+			"2000-01-02T03:04:05.678Z",
+		},
+		{
+			"millisecond ending in zero",
+			time.Date(2000, 1, 2, 3, 4, 5, 670_000_000, time.UTC),
+			"2000-01-02T03:04:05.670Z",
+		},
+		{
+			"whole second",
+			time.Date(2000, 1, 2, 3, 4, 5, 0, time.UTC),
+			"2000-01-02T03:04:05.000Z",
+		},
+		{
+			"below millisecond precision",
+			time.Date(2000, 1, 2, 3, 4, 5, 678_999_999, time.UTC),
+			"2000-01-02T03:04:05.678Z",
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.testN, func(t *testing.T) {
+			// --- When ---
+			have := tc.tim.Format(bldDateLayout)
+
+			// --- Then ---
+			if have != tc.want {
+				t.Errorf("expected %q got %q", tc.want, have)
+			}
+		})
+	}
+}
+
 func Test_BldDateStr(t *testing.T) {
 	// --- When ---
 	have := BldDateStr()
