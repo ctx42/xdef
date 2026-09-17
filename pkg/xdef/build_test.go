@@ -19,7 +19,7 @@ func Test_BldDate(t *testing.T) {
 		// --- Then ---
 		tim, err := time.Parse(time.RFC3339Nano, have)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		if tim.Location().String() != "UTC" {
 			t.Errorf("expected UTC timezone got %s", tim.Location())
@@ -51,7 +51,7 @@ func Test_BldDateStr(t *testing.T) {
 	// --- Then ---
 	tim, err := time.Parse(time.RFC3339Nano, have)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	if tim.Location().String() != "UTC" {
 		t.Errorf("expected UTC timezone got %s", tim.Location())
