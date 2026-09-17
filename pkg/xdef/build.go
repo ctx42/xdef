@@ -5,7 +5,7 @@ package xdef
 
 import "time"
 
-// Environment variable names carrying a binary's build provenance. Each pairs
+// Environment variable names carrying a binary's build metadata. Each pairs
 // with the Var* ldflags variable of the same concept, which injects the value
 // at compile time.
 const (

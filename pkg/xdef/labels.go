@@ -4,7 +4,7 @@
 package xdef
 
 // Container image labels following OCI Image Spec annotation keys. They carry
-// the image's provenance, stamped when the image is built, where the Env*
+// the image's metadata, stamped when the image is built, where the Env*
 // variables carry the binary's.
 // See: https://specs.opencontainers.org/image-spec/annotations/
 const (
