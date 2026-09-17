@@ -14,11 +14,6 @@ const (
 	// Example: 2000-01-02T03:04:05.678Z
 	VarBldDate = "bldDate"
 
-	// VarBldCCID is the variable name holding the CI/CD job identifier.
-	//
-	// Example: project-master-29
-	VarBldCCID = "bldCCID"
-
 	// VarScmRev is the variable name holding the SCM revision tag.
 	//
 	// Example: v1.2.3

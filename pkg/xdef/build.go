@@ -12,9 +12,4 @@ const (
 	//
 	// Example: 2000-01-02T03:04:05.678Z
 	EnvBldDate = "C42_BLD_DATE"
-
-	// EnvBldCCID is the environment variable holding the CI/CD job identifier.
-	//
-	// Example: project-master-29
-	EnvBldCCID = "C42_BLD_CCID"
 )

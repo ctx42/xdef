@@ -11,10 +11,3 @@ func ExampleBldDate() {
 	fmt.Println(BldDate(env))
 	// Output: 2000-01-02T03:04:05.678Z
 }
-
-func ExampleCCID() {
-	env := []string{EnvBldCCID + "=project-master-29"}
-
-	fmt.Println(CCID(env))
-	// Output: project-master-29
-}

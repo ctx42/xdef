@@ -4,7 +4,6 @@
 package xdef
 
 import (
-	"fmt"
 	"strings"
 	"time"
 )
@@ -23,25 +22,6 @@ func BldDate(env []string) string {
 // truncated to millisecond precision.
 func BldDateStr() string {
 	return time.Now().UTC().Truncate(time.Millisecond).Format(time.RFC3339Nano)
-}
-
-// CCID returns the value of the [EnvBldCCID] environment variable. When the
-// environment variable is not set or is empty, it returns a fallback
-// identifier formatted like "ccid260913203327674": the "ccid" prefix, the
-// current UTC date as twelve digits (YYMMDDhhmmss), and the milliseconds
-// within that second as three, zero padded. Both fields are fixed width, so
-// they can be read back by position.
-//
-// The fallback is alphanumeric on purpose. It reaches SemVerBuild as the
-// value of the "ccid" pair, where "." separates the pairs and the ctx42
-// convention bars "-", which leaves no separator to spend inside the value.
-func CCID(env []string) string {
-	if val, _ := envLookup(env, EnvBldCCID); val != "" {
-		return val
-	}
-	now := time.Now().UTC()
-	msec := now.Nanosecond() / int(time.Millisecond)
-	return fmt.Sprintf("ccid%s%03d", now.Format("060102150405"), msec)
 }
 
 // envLookup retrieves the value of the "env" variable named by the key. If

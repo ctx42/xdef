@@ -11,11 +11,6 @@ const (
 	// carries the version tag, the value [LabImgVer] takes; the commit hash is
 	// in [EnvScmHash].
 	//
-	// TODO(rz): This carries the revision assembled by SemVerBuild, not a
-	// bare tag, so the example below is stale. Settle which name carries the
-	// bare "git describe" value a Docker image tag needs - "+" is not in the
-	// tag charset - and document both here.
-	//
 	// Example: v1.2.3
 	EnvScmRev = "C42_SCM_REV"
 

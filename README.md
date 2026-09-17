@@ -69,15 +69,15 @@ this?".
 | Concept            | C42 env         | ldflags var | OCI label                           |
 |--------------------|-----------------|-------------|-------------------------------------|
 | build date         | `C42_BLD_DATE`  | `bldDate`   | `org.opencontainers.image.created`  |
-| CI/CD identifier   | `C42_BLD_CCID`  | `bldCCID`   | —                                   |
 | revision tag       | `C42_SCM_REV`   | `scmRev`    | `org.opencontainers.image.version`  |
 | commit hash        | `C42_SCM_HASH`  | `scmHash`   | `org.opencontainers.image.revision` |
 | working-tree state | `C42_SCM_STATE` | `scmState`  | —                                   |
 | source repository  | `C42_SCM_REPO`  | `scmRepo`   | `org.opencontainers.image.source`   |
 
-Note the spec's wording for the middle two rows: `image.version` carries the
-revision tag and `image.revision` carries the commit hash, so `LabImgRev` pairs
-with `C42_SCM_HASH`, not with `C42_SCM_REV`.
+Note the spec's wording for the revision-tag and commit-hash rows:
+`image.version` carries the revision tag and `image.revision` carries the
+commit hash, so `LabImgRev` pairs with `C42_SCM_HASH`, not with
+`C42_SCM_REV`.
 
 ```go
 xdef.VarScmRev // "scmRev"      -> -ldflags -X main.scmRev=v1.2.3
@@ -138,9 +138,6 @@ env := os.Environ()
 // Returns C42_BLD_DATE, or the current UTC time in RFC3339Nano format
 // (truncated to millisecond precision) if not set.
 created := xdef.BldDate(env)
-
-// Returns C42_BLD_CCID, or a unique "ccid<date><milliseconds>" tag if not set.
-ccid := xdef.CCID(env)
 ```
 
 Stamp an image whose build metadata is unknown:

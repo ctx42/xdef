@@ -4,7 +4,6 @@
 package xdef
 
 import (
-	"strings"
 	"testing"
 	"time"
 )
@@ -61,47 +60,6 @@ func Test_BldDateStr(t *testing.T) {
 	if since > time.Second {
 		t.Errorf("expected time diff to be less than 1s got: %s", since)
 	}
-}
-
-func Test_CCID(t *testing.T) {
-	t.Run("EnvBldCCID empty", func(t *testing.T) {
-		// --- Given ---
-		env := []string{EnvBldCCID + "="}
-		before := time.Now().UTC().Format("060102150405")
-
-		// --- When ---
-		have := CCID(env)
-
-		// --- Then ---
-		after := time.Now().UTC().Format("060102150405")
-		wBefore, wAfter := "ccid"+before, "ccid"+after
-		if !strings.HasPrefix(have, wBefore) &&
-			!strings.HasPrefix(have, wAfter) {
-
-			t.Errorf("expected prefix %q or %q got: %q",
-				wBefore, wAfter, have)
-		}
-		if len(have) != len(wBefore)+3 {
-			t.Errorf("expected length %d got: %d (%q)",
-				len(wBefore)+3, len(have), have)
-		}
-		if strings.ContainsAny(have, ".-") {
-			t.Errorf(`expected no "." or "-" in the fallback got: %q`, have)
-		}
-	})
-
-	t.Run("EnvBldCCID set", func(t *testing.T) {
-		// --- Given ---
-		env := []string{EnvBldCCID + "=project-master-29"}
-
-		// --- When ---
-		have := CCID(env)
-
-		// --- Then ---
-		if have != "project-master-29" {
-			t.Errorf(`expected "project-master-29" got: %q`, have)
-		}
-	})
 }
 
 func Test_envLookup_tabular(t *testing.T) {
