@@ -3,26 +3,7 @@
 
 package xdef
 
-import (
-	"strings"
-	"time"
-)
-
-// BldDate returns the value of the [EnvBldDate] environment variable. Returns
-// the current date, formatted the way [BldDateStr] formats it, if the variable
-// is not set or is empty.
-func BldDate(env []string) string {
-	if val, _ := envLookup(env, EnvBldDate); val != "" {
-		return val
-	}
-	return BldDateStr()
-}
-
-// BldDateStr returns the current date in UTC formatted as [time.RFC3339Nano],
-// truncated to millisecond precision.
-func BldDateStr() string {
-	return time.Now().UTC().Truncate(time.Millisecond).Format(time.RFC3339Nano)
-}
+import "strings"
 
 // envLookup retrieves the value of the "env" variable named by the key. If
 // the variable is present in the "env", the value (which may be empty) is

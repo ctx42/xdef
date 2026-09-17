@@ -34,19 +34,19 @@ The segment after `C42_` names the **family**: `BLD` (build), `SCM`, `PRJ`
 file, `BLD` splitting its `BLD_IMG` container-build inputs into a second, so
 where a name lives follows from the name itself:
 
-| File              | Holds                                  |
-|-------------------|----------------------------------------|
-| `build.go`        | `C42_BLD_*` build provenance           |
-| `scm.go`          | `C42_SCM_*` commit metadata            |
-| `ldflags.go`      | `Var*` ldflags variable names          |
-| `project.go`      | `C42_PRJ_*` project identity           |
-| `registry.go`     | `C42_REG_*` registry coordinates       |
-| `image.go`        | `C42_BLD_IMG_*` container build inputs |
-| `container.go`    | `C42_CTR_*` in-image directory layout  |
-| `goenv.go`        | `C42_GO*` Go module configuration      |
-| `labels.go`       | `Lab*` OCI Image Spec labels           |
-| `placeholders.go` | `Ph*` placeholder values               |
-| `helpers.go`      | environment-reading helpers            |
+| File              | Holds                                    |
+|-------------------|------------------------------------------|
+| `build.go`        | `C42_BLD_*` build provenance and readers |
+| `scm.go`          | `C42_SCM_*` commit metadata              |
+| `ldflags.go`      | `Var*` ldflags variable names            |
+| `project.go`      | `C42_PRJ_*` project identity             |
+| `registry.go`     | `C42_REG_*` registry coordinates         |
+| `image.go`        | `C42_BLD_IMG_*` container build inputs   |
+| `container.go`    | `C42_CTR_*` in-image directory layout    |
+| `goenv.go`        | `C42_GO*` Go module configuration        |
+| `labels.go`       | `Lab*` OCI Image Spec labels             |
+| `placeholders.go` | `Ph*` placeholder values                 |
+| `helpers.go`      | shared environment lookup                |
 
 The Go module variables are the one exception to the family rule:
 `C42_GOPROXY`, `C42_GOSUMDB`, and `C42_GOPRIVATE` drop the separator to read as
