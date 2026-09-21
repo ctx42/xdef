@@ -29,7 +29,8 @@ const (
 	// Example: clean
 	VarScmState = "scmState"
 
-	// VarScmRepo is the variable name holding the SCM remote repository URL.
+	// VarScmRepo is the variable name holding the SCM remote repository
+	// URL.
 	//
 	// Example: https://github.com/ctx42/xdef.git
 	VarScmRepo = "scmRepo"

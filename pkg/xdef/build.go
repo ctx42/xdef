@@ -9,8 +9,8 @@ import "time"
 // with the Var* ldflags variable of the same concept, which injects the value
 // at compile time.
 const (
-	// EnvBldDate is the environment variable holding the build date in RFC3339
-	// format.
+	// EnvBldDate is the environment variable holding the build date in
+	// RFC3339 format.
 	//
 	// Example: 2000-01-02T03:04:05.678Z
 	EnvBldDate = "C42_BLD_DATE"
@@ -37,5 +37,11 @@ const bldDateLayout = "2006-01-02T15:04:05.000Z07:00"
 // fractional second is always three digits, so every date it returns is the
 // same width.
 func BldDateStr() string {
-	return time.Now().UTC().Format(bldDateLayout)
+	return bldDateStr(time.Now())
+}
+
+// bldDateStr renders tim the way [BldDateStr] does, taking the clock as an
+// argument so a test can pin the fractional second.
+func bldDateStr(tim time.Time) string {
+	return tim.UTC().Format(bldDateLayout)
 }

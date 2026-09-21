@@ -8,16 +8,16 @@ package xdef
 // variables carry the binary's.
 // See: https://specs.opencontainers.org/image-spec/annotations/
 const (
-	// LabImgCreated is the OCI Image Spec label for the date and time on which
-	// the image was built. The value must be in RFC3339 format. If the build
-	// date is unknown, set it to [PhDate].
+	// LabImgCreated is the OCI Image Spec label for the date and time on
+	// which the image was built. The value must be in RFC3339 format. If
+	// the build date is unknown, set it to [PhDate].
 	//
 	// Example: 2000-01-02T03:04:05.678Z
 	LabImgCreated = "org.opencontainers.image.created"
 
-	// LabImgRev is the OCI Image Spec label for the SCM commit hash from which
-	// the image was built. Despite the spec's "revision" wording it takes the
-	// hash in [EnvScmHash], not the revision tag in [EnvScmRev].
+	// LabImgRev is the OCI Image Spec label for the SCM commit hash from
+	// which the image was built. Despite the spec's "revision" wording it
+	// takes the hash in [EnvScmHash], not the revision tag in [EnvScmRev].
 	//
 	// Example: 1a12ec31
 	LabImgRev = "org.opencontainers.image.revision"

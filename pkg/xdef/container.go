@@ -7,16 +7,16 @@ package xdef
 // that ctx42 base images provide. Programs and entrypoint scripts running
 // inside the image read them to locate project files and supporting tooling.
 const (
-	// EnvCtrRoot is the environment variable holding the absolute path to the
-	// root directory inside the image under which files are placed, such as
-	// project sources, scripts, and supporting tooling.
+	// EnvCtrRoot is the environment variable holding the absolute path to
+	// the root directory inside the image under which files are placed,
+	// such as project sources, scripts, and supporting tooling.
 	//
 	// Example: /ctx42
 	EnvCtrRoot = "C42_CTR_ROOT"
 
-	// EnvCtrBin is the environment variable holding the absolute path to the
-	// directory with project-related scripts and binary files. It is usually a
-	// subdirectory of [EnvCtrRoot].
+	// EnvCtrBin is the environment variable holding the absolute path to
+	// the directory with project-related scripts and binary files. It is
+	// usually a subdirectory of [EnvCtrRoot].
 	//
 	// Example: /ctx42/bin
 	EnvCtrBin = "C42_CTR_BIN"
@@ -28,9 +28,9 @@ const (
 	// Example: /ctx42/project
 	EnvCtrPrjRoot = "C42_CTR_PRJ_ROOT"
 
-	// EnvCtrEntrypoint is the environment variable holding the absolute path to
-	// the directory with entrypoint scripts run during container startup. It is
-	// usually a subdirectory of [EnvCtrRoot].
+	// EnvCtrEntrypoint is the environment variable holding the absolute
+	// path to the directory with entrypoint scripts run during container
+	// startup. It is usually a subdirectory of [EnvCtrRoot].
 	//
 	// Example: /ctx42/entrypoint
 	EnvCtrEntrypoint = "C42_CTR_ENTRYPOINT"

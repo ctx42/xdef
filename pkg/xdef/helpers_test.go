@@ -14,11 +14,35 @@ func Test_envLookup_tabular(t *testing.T) {
 		wantValue  string
 		wantExists bool
 	}{
-		{"found", []string{"key0=val0", "key1=val1"}, "key1", "val1", true},
-		{"not found", []string{"key0=val0", "key1=val1"}, "key9", "", false},
-		{"partial", []string{"key0=val0", "key1=val1"}, "key", "", false},
+		{
+			"found",
+			[]string{"key0=val0", "key1=val1"},
+			"key1",
+			"val1",
+			true,
+		},
+		{
+			"not found",
+			[]string{"key0=val0", "key1=val1"},
+			"key9",
+			"",
+			false,
+		},
+		{
+			"partial",
+			[]string{"key0=val0", "key1=val1"},
+			"key",
+			"",
+			false,
+		},
 		{"empty env", []string{}, "key", "", false},
-		{"empty key", []string{"key0=val0", "key1=val1"}, "", "", false},
+		{
+			"empty key",
+			[]string{"key0=val0", "key1=val1"},
+			"",
+			"",
+			false,
+		},
 		{
 			"last value counts",
 			[]string{"key0=val0", "key1=val1", "key0=abc"},
@@ -34,15 +58,14 @@ func Test_envLookup_tabular(t *testing.T) {
 			haveValue, haveExists := envLookup(tc.env, tc.findKey)
 
 			// --- Then ---
+			format := "expected value %#q got %#q"
 			if tc.wantValue != haveValue {
-				t.Errorf("expected value %#q got %#q", tc.wantValue, haveValue)
+				t.Errorf(format, tc.wantValue, haveValue)
 			}
+
+			format = "expected exists %v got %v"
 			if tc.wantExists != haveExists {
-				t.Errorf(
-					"expected value `%v` got `%v`",
-					tc.wantExists,
-					haveExists,
-				)
+				t.Errorf(format, tc.wantExists, haveExists)
 			}
 		})
 	}

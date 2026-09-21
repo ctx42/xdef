@@ -7,9 +7,9 @@ package xdef
 // determine. Tooling writes them where a value is required but unknown, so a
 // label or variable is never left empty.
 const (
-	// PhDate is the placeholder for an unknown build date. It is the RFC3339
-	// zero time, the value the OCI Image Spec prescribes for [LabImgCreated]
-	// when the build date is unknown.
+	// PhDate is the placeholder for an unknown build date. It is the
+	// RFC3339 zero time, the value the OCI Image Spec prescribes for
+	// [LabImgCreated] when the build date is unknown.
 	PhDate = "0001-01-01T00:00:00Z"
 
 	// PhHash is the placeholder for an unknown short SCM commit hash.
@@ -21,8 +21,9 @@ const (
 	// PhUnknown is the placeholder for an unknown value of any other kind.
 	PhUnknown = "unknown"
 
-	// PhNotSet is the placeholder for a build-metadata variable that ldflags
-	// never populated at compile time. Unlike the placeholders above it marks
-	// a missing injection, not a value the build could not determine.
+	// PhNotSet is the placeholder for a build-metadata variable that
+	// ldflags never populated at compile time. Unlike the placeholders
+	// above it marks a missing injection, not a value the build could not
+	// determine.
 	PhNotSet = "<not set>"
 )
