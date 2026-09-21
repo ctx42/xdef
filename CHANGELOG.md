@@ -1,3 +1,13 @@
+## v0.8.0 (Mon, 21 Sep 2026 10:58:10 UTC)
+- refactor(xdef)!: derive every name from one rule.
+- refactor(xdef)!: drop the CI/CD job identifier.
+- refactor(xdef): move the build date readers to build.go.
+- feat(xdef): add the build target variable.
+- test(xdef): stop on an unparsable build date.
+- refactor(xdef)!: render the build date at a fixed width.
+- docs(xdef): reword the package docs and README in plain English.
+- refactor(xdef): make the build date format testable.
+
 ## v0.7.0 (Tue, 14 Jul 2026 08:16:43 UTC)
 - feat(xdef)!: use container-generic env var names.
 
