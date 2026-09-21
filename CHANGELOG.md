@@ -1,3 +1,6 @@
+## v0.9.0 (Mon, 21 Sep 2026 11:17:45 UTC)
+- ci: add GitHub Actions workflow to run tests.
+
 ## v0.8.0 (Mon, 21 Sep 2026 10:58:10 UTC)
 - refactor(xdef)!: derive every name from one rule.
 - refactor(xdef)!: drop the CI/CD job identifier.
