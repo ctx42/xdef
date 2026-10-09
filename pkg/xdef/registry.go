@@ -22,10 +22,10 @@ const (
 
 	// EnvRegRepo is the environment variable holding the private
 	// repository that image references are built from and images are
-	// pushed to. It carries the repository alone: the host it lives on
-	// is in [EnvRegHost], and a value that repeats the host there builds
-	// a reference naming it twice.
+	// pushed to. It carries the host and the repository together, the
+	// prefix every image reference starts with, so its host repeats the
+	// value of [EnvRegHost].
 	//
-	// Example: repo
+	// Example: my.nexus.dev/repo
 	EnvRegRepo = "C42_REG_REPO"
 )

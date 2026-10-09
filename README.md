@@ -123,8 +123,10 @@ spec has no key for any of them (see [Image labels](#image-labels)).
 | Go checksum database                  | `C42_GOSUMDB`         | —      |
 | private Go module patterns            | `C42_GOPRIVATE`       | —      |
 
-The registry variables build image references. `C42_REG_HOST` and
-`C42_REG_REPO` together mark the remote as configured.
+The registry variables build image references. `C42_REG_REPO` carries the host
+and the repository together (`my.nexus.dev/repo`), the prefix every image
+reference starts with. `C42_REG_HOST` and `C42_REG_REPO` together mark the
+remote as configured.
 
 The build variables are passed to the container build as build arguments.
 `C42_BLD_IMG_TARGETS` is optional: it switches a project from one image to one
