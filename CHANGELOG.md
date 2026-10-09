@@ -1,3 +1,6 @@
+## v0.9.1 (Fri, 09 Oct 2026 12:34:33 UTC)
+- docs(xdef): document C42_REG_REPO as host plus repository.
+
 ## v0.9.0 (Mon, 21 Sep 2026 11:17:45 UTC)
 - ci: add GitHub Actions workflow to run tests.
 
