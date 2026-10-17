@@ -21,3 +21,18 @@ func envLookup(env []string, key string) (string, bool) {
 	}
 	return value, exists
 }
+
+// envJoin returns prefix followed by the values of the "env" variables named
+// by keys, joined with "-". It returns an empty string when any of them is
+// unset or empty.
+func envJoin(env []string, prefix string, keys ...string) string {
+	vals := make([]string, 0, len(keys))
+	for _, key := range keys {
+		val, _ := envLookup(env, key)
+		if val == "" {
+			return ""
+		}
+		vals = append(vals, val)
+	}
+	return prefix + strings.Join(vals, "-")
+}

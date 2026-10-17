@@ -10,10 +10,12 @@ Single source of truth for the names ctx42 modules share:
 - the `go build -ldflags -X` variables that put that metadata into the binary
   at compile time,
 - the OCI Image Spec labels set on built images,
+- the labels ctx42 modules must agree on, such as the one tying Docker
+  resources to the CI/CD run that created them,
 - the placeholder values used when a build cannot determine a value.
 
 `xdef` also provides helpers that read those variables from a process
-environment slice.
+environment slice, such as `CCRunID`.
 
 ## Import
 
@@ -30,35 +32,40 @@ holds always match:
   snake case. `EnvBldImgBase` is `C42_BLD_IMG_BASE`.
 - `Var*` — the identifier without its prefix, in lower camel case.
   `VarBldDate` is `bldDate`, the Go variable that `-ldflags -X` sets.
-- `Lab*` — an OCI Image Spec annotation key; the spec decides how it is
-  spelled.
+- `Lab*` — an OCI Image Spec annotation key, which the spec spells, or a
+  ctx42 key: `dev.ctx42.` followed by the family and the identifier without
+  its prefix, in lower case and dot-separated. `LabCCRunID` is
+  `dev.ctx42.cc.run.id`.
 - `Ph*` — a placeholder value rather than a name.
 
 The segment after `C42_` names the **family**: `BLD` (build), `SCM`, `PRJ`
-(project), `REG` (registry), `CTR` (in-image layout). Each family has its own
-file. `BLD` is the exception: its `BLD_IMG` container build inputs live in a
-second file. The name itself therefore tells you where it lives:
+(project), `REG` (registry), `CTR` (in-image layout), `CC` (CI/CD run). Each
+family has its own file, which also holds the family's ctx42 label keys.
+`BLD` is the exception: its `BLD_IMG` container build inputs live in a second
+file. The name itself therefore tells you where it lives:
 
-| File              | Holds                                  |
-|-------------------|----------------------------------------|
-| `build.go`        | `C42_BLD_*` build metadata and readers |
-| `scm.go`          | `C42_SCM_*` commit metadata            |
-| `ldflags.go`      | `Var*` ldflags variable names          |
-| `project.go`      | `C42_PRJ_*` project identity           |
-| `registry.go`     | `C42_REG_*` registry coordinates       |
-| `image.go`        | `C42_BLD_IMG_*` container build inputs |
-| `container.go`    | `C42_CTR_*` in-image directory layout  |
-| `goenv.go`        | `C42_GO*` Go module configuration      |
-| `labels.go`       | `Lab*` OCI Image Spec labels           |
-| `placeholders.go` | `Ph*` placeholder values               |
-| `helpers.go`      | shared environment lookup              |
+| File              | Holds                                     |
+|-------------------|-------------------------------------------|
+| `build.go`        | `C42_BLD_*` build metadata and readers    |
+| `scm.go`          | `C42_SCM_*` commit metadata               |
+| `ldflags.go`      | `Var*` ldflags variable names             |
+| `project.go`      | `C42_PRJ_*` project identity              |
+| `registry.go`     | `C42_REG_*` registry coordinates          |
+| `image.go`        | `C42_BLD_IMG_*` container build inputs    |
+| `container.go`    | `C42_CTR_*` in-image directory layout     |
+| `goenv.go`        | `C42_GO*` Go module configuration         |
+| `cc.go`           | `C42_CC_*` and `dev.ctx42.cc.*` CI/CD run |
+| `labels.go`       | `Lab*` OCI Image Spec labels              |
+| `placeholders.go` | `Ph*` placeholder values                  |
+| `helpers.go`      | shared environment lookup                 |
 
 The Go module variables are the one exception to the family rule.
 `C42_GOPROXY`, `C42_GOSUMDB`, and `C42_GOPRIVATE` drop the separator, so they
 read like the toolchain variables they are copied into.
 
-`xdef` owns `C42_` and the family segments above. A module built on it owns
-`C42_` plus its own tool segment, and defines those names itself.
+`xdef` owns `C42_` and the family segments above, and `dev.ctx42.` with the
+same families. A module built on it owns `C42_` plus its own tool segment, and
+defines those names itself.
 
 ## Build and SCM metadata
 
@@ -92,12 +99,17 @@ xdef.EnvScmRev // "C42_SCM_REV" -> environment variable read at runtime
 ## Image labels
 
 The metadata table above pairs four values with the OCI Image Spec keys that
-hold them. Those four are the only label keys `xdef` defines. The
-`org.opencontainers` prefix belongs to the spec, and the spec has no key for
-some values a build carries — the build target in `C42_BLD_IMG_TARGET` is one
-of them. `xdef` names no key for those on purpose. Such a key belongs to the
-code that sets the labels, under that vendor's own reverse domain prefix, so
-nothing here forces a user of this module to take a ctx42 name.
+hold them. The `org.opencontainers` prefix belongs to the spec, and the spec
+has no key for some values a build carries — the build target in
+`C42_BLD_IMG_TARGET` is one of them. `xdef` names no key for those on purpose.
+Such a key belongs to the code that sets the labels, under that vendor's own
+reverse domain prefix.
+
+The one exception is a label several ctx42 modules must agree on. `xdef`
+defines those under `dev.ctx42.`, in the family's file, so the modules that
+set a label and the ones that read it cannot drift apart. Today that is
+`LabCCRunID` (see [CI/CD run ID](#cicd-run-id)). No user of this module is
+required to set a ctx42 label.
 
 ## Project and container build variables
 
@@ -137,6 +149,38 @@ given image was built from.
 The `C42_CTR_*` variables name the standard directory layout that ctx42 base
 images provide, for programs and entrypoint scripts that run inside the image.
 
+## CI/CD run ID
+
+`C42_CC_RUN_ID` identifies one CI/CD run: one Jenkins build, one GitHub
+Actions run attempt, one GitLab job. Tools label the Docker resources a run
+creates with `dev.ctx42.cc.run.id=<run ID>`, so the run removes its own
+leftovers when it ends without any tool knowing which CI/CD system runs it.
+The value is opaque, compared only for equality, and must be unique among the
+runs that share a Docker daemon.
+
+Tools read it with `CCRunID`, never from the variable directly. It returns
+the first match:
+
+| Detected when                | Run ID                                                                                 | Example                          |
+|------------------------------|----------------------------------------------------------------------------------------|----------------------------------|
+| `C42_CC_RUN_ID` is not empty | its value                                                                              | `my-run`                         |
+| `JENKINS_URL` is not empty   | `BUILD_TAG`                                                                            | `jenkins-skw-dki-go-master-12`   |
+| `GITHUB_ACTIONS` is `true`   | `github-` + `GITHUB_REPOSITORY`, `GITHUB_RUN_ID`, `GITHUB_RUN_ATTEMPT` joined with `-` | `github-ctx42/xctr-1234567890-1` |
+| `GITLAB_CI` is `true`        | `gitlab-` + `CI_PROJECT_PATH`, `CI_JOB_ID` joined with `-`                             | `gitlab-acme/api-987654`         |
+| none of these                | empty: no label, nothing removed                                                       |                                  |
+
+A detected system with any of its variables empty yields an empty ID, never a
+partial one. The GitHub ID leaves out the job, because a workflow-level `env:`
+cannot read it, and GitHub-hosted runners give every job its own Docker
+daemon. Runs that share a daemon and get the same derived ID, such as matrix
+jobs on a self-hosted runner, set `C42_CC_RUN_ID` themselves. In a GitHub
+workflow:
+
+```yaml
+env:
+  C42_CC_RUN_ID: github-${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}
+```
+
 ## Placeholders
 
 | Constant    | Value                  | Used for                           |
@@ -161,6 +205,9 @@ env := os.Environ()
 // Returns C42_BLD_DATE, or the current UTC time in RFC3339 format with
 // millisecond precision if not set.
 created := xdef.BldDate(env)
+
+// Returns the CI/CD run ID, or "" outside CI/CD.
+runID := xdef.CCRunID(env)
 ```
 
 Set the labels on an image whose build metadata is unknown:

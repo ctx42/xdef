@@ -70,3 +70,32 @@ func Test_envLookup_tabular(t *testing.T) {
 		})
 	}
 }
+
+func Test_envJoin_tabular(t *testing.T) {
+	env := []string{"A=a", "B=b", "EMPTY="}
+
+	tt := []struct {
+		testN string
+
+		prefix string
+		keys   []string
+		want   string
+	}{
+		{"one key", "", []string{"A"}, "a"},
+		{"keys joined after prefix", "p-", []string{"A", "B"}, "p-a-b"},
+		{"unset key", "p-", []string{"A", "MISSING"}, ""},
+		{"empty key", "p-", []string{"A", "EMPTY"}, ""},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.testN, func(t *testing.T) {
+			// --- When ---
+			have := envJoin(env, tc.prefix, tc.keys...)
+
+			// --- Then ---
+			if have != tc.want {
+				t.Errorf("expected %q got %q", tc.want, have)
+			}
+		})
+	}
+}
