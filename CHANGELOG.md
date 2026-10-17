@@ -1,3 +1,6 @@
+## v0.10.0 (Sat, 17 Oct 2026 18:32:56 UTC)
+- feat(xdef): add CI/CD run ID variable, label, and reader.
+
 ## v0.9.1 (Fri, 09 Oct 2026 12:34:33 UTC)
 - docs(xdef): document C42_REG_REPO as host plus repository.
 
