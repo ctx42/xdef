@@ -1,3 +1,6 @@
+## v0.10.1 (Sat, 17 Oct 2026 22:00:08 UTC)
+- ci: set C42_CC_RUN_ID in the workflow environment.
+
 ## v0.10.0 (Sat, 17 Oct 2026 18:32:56 UTC)
 - feat(xdef): add CI/CD run ID variable, label, and reader.
 
