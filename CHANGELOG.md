@@ -1,3 +1,6 @@
+## v0.10.2 (Tue, 24 Nov 2026 14:29:51 UTC)
+- docs: add AGENTS.md with module purpose and writing rules.
+
 ## v0.10.1 (Sat, 17 Oct 2026 22:00:08 UTC)
 - ci: set C42_CC_RUN_ID in the workflow environment.
 
